@@ -32816,7 +32816,7 @@ var createRoute = function createRoute(basepath) {
 var shouldNavigate = function shouldNavigate(event) {
   return !event.defaultPrevented && event.button === 0 && !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }; ////////////////////////////////////////////////////////////////////////
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"Details.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"Carousel.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32828,13 +32828,135 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const Details = props => {
-  return /*#__PURE__*/_react.default.createElement("pre", null, /*#__PURE__*/_react.default.createElement("code", null, JSON.stringify(props, null, 4)));
-};
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class Carousel extends _react.default.Component {
+  constructor(props) {
+    super(props);
+
+    _defineProperty(this, "handleIndexClick", event => {
+      this.setState({
+        active: +event.target.dataset.index
+      });
+    });
+
+    this.handleIndexClick = this.handleIndexClick.bind(this);
+    this.state = {
+      photos: [],
+      active: 0
+    };
+  }
+
+  static getDerivedStateFromProps({
+    media
+  }) {
+    let photos = ['http://placecorgi.com/600/600'];
+
+    if (media.length) {
+      photos = media.map(({
+        large
+      }) => large);
+    }
+
+    return {
+      photos
+    };
+  }
+
+  render() {
+    const {
+      photos,
+      active
+    } = this.state;
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: "carousel"
+    }, /*#__PURE__*/_react.default.createElement("img", {
+      src: photos[active],
+      alt: "animal"
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: "carousel-smaller"
+    }, photos.map((photo, index) =>
+    /*#__PURE__*/
+    // eslint-disable-next-line
+    _react.default.createElement("img", {
+      src: photo,
+      alt: "animal-thumbnail",
+      key: photo,
+      onClick: this.handleIndexClick,
+      "data-index": index,
+      className: index === active ? "active" : ""
+    }))));
+  }
+
+}
+
+var _default = Carousel;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"Details.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _pet = _interopRequireDefault(require("@frontendmasters/pet"));
+
+var _Carousel = _interopRequireDefault(require("./Carousel"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class Details extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    _pet.default.animal(this.props.id).then(({
+      animal
+    }) => {
+      this.setState({
+        name: animal.name,
+        animal: animal.type,
+        location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
+        description: animal.description,
+        media: animal.photos,
+        breed: animal.breeds.primary,
+        loading: false
+      });
+    }, console.error);
+  }
+
+  render() {
+    if (this.state.loading) {
+      return /*#__PURE__*/_react.default.createElement("h1", null, "Loading...");
+    }
+
+    const {
+      name,
+      animal,
+      location,
+      description,
+      breed,
+      media
+    } = this.state;
+    return /*#__PURE__*/_react.default.createElement("div", {
+      className: "details"
+    }, /*#__PURE__*/_react.default.createElement(_Carousel.default, {
+      media: media
+    }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement("button", null, "Adopt $", name), /*#__PURE__*/_react.default.createElement("p", null, description)));
+  }
+
+}
 
 var _default = Details;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"App.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -32888,7 +33010,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58568" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50144" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
