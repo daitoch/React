@@ -30015,7 +30015,7 @@ const Pet = ({
   location,
   id
 }) => {
-  let hero = "http://placeorgi.com/300/300";
+  let hero = "http://placecorgi.com/300/300";
 
   if (media.length) {
     hero = media[0].small;
@@ -32850,7 +32850,7 @@ class Carousel extends _react.default.Component {
   static getDerivedStateFromProps({
     media
   }) {
-    let photos = ['http://placecorgi.com/600/600'];
+    let photos = ["http://placecorgi.com/600/600"];
 
     if (media.length) {
       photos = media.map(({
@@ -32892,7 +32892,7 @@ class Carousel extends _react.default.Component {
 
 var _default = Carousel;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"Details.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"ErrorBoundry.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32902,9 +32902,58 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _router = require("@reach/router");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class ErrorBoundry extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return {
+      hasError: true
+    };
+  }
+
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundry caught an error", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return /*#__PURE__*/_react.default.createElement("h1", null, "There was an error with this listing. ", /*#__PURE__*/_react.default.createElement(_router.Link, {
+        to: "/"
+      }, "Click Here"), " ", "to go back to home page or wait five seconds");
+    }
+
+    return this.props.children;
+  }
+
+}
+
+var _default = ErrorBoundry;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Details.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = DetailsWithErrorBoundries;
+
+var _react = _interopRequireDefault(require("react"));
+
 var _pet = _interopRequireDefault(require("@frontendmasters/pet"));
 
 var _Carousel = _interopRequireDefault(require("./Carousel"));
+
+var _ErrorBoundry = _interopRequireDefault(require("./ErrorBoundry"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32949,14 +32998,17 @@ class Details extends _react.default.Component {
       className: "details"
     }, /*#__PURE__*/_react.default.createElement(_Carousel.default, {
       media: media
-    }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement("button", null, "Adopt $", name), /*#__PURE__*/_react.default.createElement("p", null, description)));
+    }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement("button", null, "Adopt ", name), /*#__PURE__*/_react.default.createElement("p", null, description)));
   }
 
 }
 
-var _default = Details;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js"}],"App.js":[function(require,module,exports) {
+function DetailsWithErrorBoundries(props) {
+  return /*#__PURE__*/_react.default.createElement(_ErrorBoundry.default, null, /*#__PURE__*/_react.default.createElement(Details, props));
+}
+
+;
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundry":"ErrorBoundry.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
