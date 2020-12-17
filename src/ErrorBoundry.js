@@ -5,7 +5,8 @@ class ErrorBoundry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false
+      hasError: false,
+      redirect: false,
     };
   }
 
@@ -13,11 +14,19 @@ class ErrorBoundry extends React.Component {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }
-  
+
   componentDidCatch(error, info) {
     console.error("ErrorBoundry caught an error", error, info);
   }
+  componentdidUpdate() {
+    if (this.state.hasError) {
+      setTimeout(() => this.setState({ redirect: true }), 5000);
+    }
+  }
   render() {
+    if (this.state.redirect) {
+      return <redirect to="/" />;
+    }
     if (this.state.hasError) {
       return (
         <h1>
