@@ -6,18 +6,18 @@ import Details from "./Details";
 import ThemeContext from "./ThemeContext";
 
 const App = () => {
-  const themeHooks = useState("darkblue");
+  const themeHooks = useState("peru");
   return (
     <ThemeContext.Provider value={themeHooks}>
-    <div>
-      <header>
-        <Link to="/">Adopt-me!</Link>
-      </header>
-      <Router>
-        <SearchParams path="/" />
-        <Details path="/details/:id" />
-      </Router>
-    </div>
+      <div>
+        <header>
+          <Link to="/">Adopt-me!</Link>
+        </header>
+        <Router>
+          <SearchParams path="/" />
+          <Details path="/details/:id" />
+        </Router>
+      </div>
     </ThemeContext.Provider>
   );
 };

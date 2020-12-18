@@ -29995,157 +29995,7 @@ const useDropdown = (label, defaultState, options) => {
 
 var _default = useDropdown;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"Pet.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const Pet = ({
-  animal,
-  name,
-  breed,
-  media,
-  location,
-  id
-}) => {
-  let hero = "http://placecorgi.com/300/300";
-
-  if (media.length) {
-    hero = media[0].small;
-  }
-
-  return /*#__PURE__*/_react.default.createElement("a", {
-    href: `/details/${id}`,
-    className: "pet"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "image-container"
-  }, /*#__PURE__*/_react.default.createElement("img", {
-    src: hero,
-    alt: name
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "info"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`)));
-};
-
-var _default = Pet;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"Results.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _Pet = _interopRequireDefault(require("./Pet"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const Results = ({
-  pets
-}) => {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "search"
-  }, !pets.length ? /*#__PURE__*/_react.default.createElement("h1", null, "No Pets Found") : pets.map(pet => {
-    return /*#__PURE__*/_react.default.createElement(_Pet.default, {
-      animal: pet.type,
-      key: pet.id,
-      name: pet.name,
-      breed: pet.breeds.primary,
-      media: pet.photos,
-      location: `${pet.contact.address.city}, ${pet.contact.address.state}`,
-      id: pet.id
-    });
-  }));
-};
-
-var _default = Results;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","./Pet":"Pet.js"}],"SearchParams.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _pet = _interopRequireWildcard(require("@frontendmasters/pet"));
-
-var _useDropdown = _interopRequireDefault(require("./useDropdown"));
-
-var _Results = _interopRequireDefault(require("./Results"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-const SearchParams = () => {
-  const [location, setLocation] = (0, _react.useState)("Seattle, WA");
-  const [breeds, updateBreeds] = (0, _react.useState)([]);
-  const [animal, AnimalDropDown] = (0, _useDropdown.default)("Animals", "dog", _pet.ANIMALS);
-  const [breed, BreedDropDown, updateBreed] = (0, _useDropdown.default)("Breeds", "", breeds);
-  const [pets, setPets] = (0, _react.useState)([]);
-
-  async function requestPets() {
-    const {
-      animals
-    } = await _pet.default.animals({
-      location,
-      breed,
-      type: animal
-    });
-    setPets(animals || []);
-    console.log(pets);
-  }
-
-  (0, _react.useEffect)(() => {
-    updateBreeds([]);
-    updateBreed("");
-
-    _pet.default.breeds(animal).then(({
-      breeds
-    }) => {
-      const breedStrings = breeds.map(({
-        name
-      }) => name);
-      updateBreeds(breedStrings);
-    }, console.error);
-  }, [animal]);
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "search-params"
-  }, /*#__PURE__*/_react.default.createElement("form", {
-    onSubmit: e => {
-      e.preventDefault();
-      requestPets();
-    }
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "location"
-  }, "Location", /*#__PURE__*/_react.default.createElement("input", {
-    id: "location",
-    value: location,
-    placeholder: "Location",
-    onChange: e => setLocation(e.target.value)
-  })), /*#__PURE__*/_react.default.createElement(AnimalDropDown, null), /*#__PURE__*/_react.default.createElement(BreedDropDown, null), /*#__PURE__*/_react.default.createElement("button", null, "Submit")), /*#__PURE__*/_react.default.createElement(_Results.default, {
-    pets: pets
-  }));
-};
-
-var _default = SearchParams;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./useDropdown":"useDropdown.js","./Results":"Results.js"}],"../node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
 /** @license React v16.13.1
  * react-is.development.js
  *
@@ -32816,7 +32666,193 @@ var createRoute = function createRoute(basepath) {
 var shouldNavigate = function shouldNavigate(event) {
   return !event.defaultPrevented && event.button === 0 && !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }; ////////////////////////////////////////////////////////////////////////
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"Carousel.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","invariant":"../node_modules/invariant/browser.js","create-react-context":"../node_modules/create-react-context/lib/index.js","react-lifecycles-compat":"../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js","./lib/utils":"../node_modules/@reach/router/es/lib/utils.js","./lib/history":"../node_modules/@reach/router/es/lib/history.js"}],"Pet.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _router = require("@reach/router");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Pet = ({
+  animal,
+  name,
+  breed,
+  media,
+  location,
+  id
+}) => {
+  let hero = "http://placecorgi.com/300/300";
+
+  if (media.length) {
+    hero = media[0].small;
+  }
+
+  return /*#__PURE__*/_react.default.createElement(_router.Link, {
+    to: `/details/${id}`,
+    className: "pet"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "image-container"
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: hero,
+    alt: name
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: "info"
+  }, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`)));
+};
+
+var _default = Pet;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Results.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Pet = _interopRequireDefault(require("./Pet"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Results = ({
+  pets
+}) => {
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "search"
+  }, !pets.length ? /*#__PURE__*/_react.default.createElement("h1", null, "No Pets Found") : pets.map(pet => {
+    return /*#__PURE__*/_react.default.createElement(_Pet.default, {
+      animal: pet.type,
+      key: pet.id,
+      name: pet.name,
+      breed: pet.breeds.primary,
+      media: pet.photos,
+      location: `${pet.contact.address.city}, ${pet.contact.address.state}`,
+      id: pet.id
+    });
+  }));
+};
+
+var _default = Results;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./Pet":"Pet.js"}],"ThemeContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+const ThemeContext = (0, _react.createContext)(["green", () => {}]);
+var _default = ThemeContext;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"SearchParams.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _pet = _interopRequireWildcard(require("@frontendmasters/pet"));
+
+var _useDropdown = _interopRequireDefault(require("./useDropdown"));
+
+var _Results = _interopRequireDefault(require("./Results"));
+
+var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const SearchParams = () => {
+  const [location, setLocation] = (0, _react.useState)("Seattle, WA");
+  const [breeds, updateBreeds] = (0, _react.useState)([]);
+  const [animal, AnimalDropDown] = (0, _useDropdown.default)("Animals", "dog", _pet.ANIMALS);
+  const [breed, BreedDropDown, updateBreed] = (0, _useDropdown.default)("Breeds", "", breeds);
+  const [pets, setPets] = (0, _react.useState)([]);
+  const [theme, setTheme] = (0, _react.useContext)(_ThemeContext.default);
+
+  async function requestPets() {
+    const {
+      animals
+    } = await _pet.default.animals({
+      location,
+      breed,
+      type: animal
+    });
+    setPets(animals || []);
+    console.log(pets);
+  }
+
+  (0, _react.useEffect)(() => {
+    updateBreeds([]);
+    updateBreed("");
+
+    _pet.default.breeds(animal).then(({
+      breeds
+    }) => {
+      const breedStrings = breeds.map(({
+        name
+      }) => name);
+      updateBreeds(breedStrings);
+    }, console.error);
+  }, [animal]);
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "search-params"
+  }, /*#__PURE__*/_react.default.createElement("form", {
+    onSubmit: e => {
+      e.preventDefault();
+      requestPets();
+    }
+  }, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "location"
+  }, "Location", /*#__PURE__*/_react.default.createElement("input", {
+    id: "location",
+    value: location,
+    placeholder: "Location",
+    onChange: e => setLocation(e.target.value)
+  })), /*#__PURE__*/_react.default.createElement(AnimalDropDown, null), /*#__PURE__*/_react.default.createElement(BreedDropDown, null), /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "theme"
+  }, /*#__PURE__*/_react.default.createElement("select", {
+    name: "theme",
+    onBlur: e => setTheme(e.target.value),
+    onChange: e => setTheme(e.target.value)
+  }, /*#__PURE__*/_react.default.createElement("option", {
+    value: "peru"
+  }, "Peru"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "darkblue"
+  }, "Dark Blue"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "mediumorchid"
+  }, "Medium Orchid"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "chartreuse"
+  }, "chartreuse"))), /*#__PURE__*/_react.default.createElement("button", {
+    style: {
+      backgroundColor: theme
+    }
+  }, "Submit")), /*#__PURE__*/_react.default.createElement(_Results.default, {
+    pets: pets
+  }));
+};
+
+var _default = SearchParams;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./useDropdown":"useDropdown.js","./Results":"Results.js","./ThemeContext":"ThemeContext.js"}],"Carousel.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32954,7 +32990,43 @@ class ErrorBoundry extends _react.default.Component {
 
 var _default = ErrorBoundry;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Details.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@reach/router":"../node_modules/@reach/router/es/index.js"}],"Modal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactDom = require("react-dom");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const Modal = ({
+  children
+}) => {
+  const elRef = (0, _react.useRef)(null);
+
+  if (!elRef.current) {
+    const div = document.createElement("div");
+    elRef.current = div;
+  }
+
+  (0, _react.useEffect)(() => {
+    const modalRoot = document.getElementById("modal");
+    modalRoot.appendChild(elRef.current);
+    return () => modalRoot.removeChild(elRef.current);
+  }, []);
+  return (0, _reactDom.createPortal)( /*#__PURE__*/_react.default.createElement("div", null, children), elRef.current);
+};
+
+var _default = Modal;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js"}],"Details.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32970,13 +33042,29 @@ var _Carousel = _interopRequireDefault(require("./Carousel"));
 
 var _ErrorBoundry = _interopRequireDefault(require("./ErrorBoundry"));
 
+var _ThemeContext = _interopRequireDefault(require("./ThemeContext"));
+
+var _router = require("@reach/router");
+
+var _Modal = _interopRequireDefault(require("./Modal"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 class Details extends _react.default.Component {
   constructor(props) {
     super(props);
+
+    _defineProperty(this, "toggleModal", () => this.setState({
+      showModal: !this.state.showModal
+    }));
+
+    _defineProperty(this, "adopt", () => (0, _router.navigate)(this.state.url));
+
     this.state = {
-      loading: true
+      loading: true,
+      showModal: false
     };
   }
 
@@ -32985,6 +33073,7 @@ class Details extends _react.default.Component {
       animal
     }) => {
       this.setState({
+        url: animal.url,
         name: animal.name,
         animal: animal.type,
         location: `${animal.contact.address.city}, ${animal.contact.address.state}`,
@@ -33007,13 +33096,25 @@ class Details extends _react.default.Component {
       location,
       description,
       breed,
-      media
+      media,
+      showModal
     } = this.state;
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "details"
     }, /*#__PURE__*/_react.default.createElement(_Carousel.default, {
       media: media
-    }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement("button", null, "Adopt ", name), /*#__PURE__*/_react.default.createElement("p", null, description)));
+    }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, name), /*#__PURE__*/_react.default.createElement("h2", null, `${animal} - ${breed} - ${location}`), /*#__PURE__*/_react.default.createElement(_ThemeContext.default.Consumer, null, ([theme]) => /*#__PURE__*/_react.default.createElement("button", {
+      onClick: this.toggleModal,
+      style: {
+        backgroundColor: theme
+      }
+    }, "Adopt ", name)), /*#__PURE__*/_react.default.createElement("p", null, description), showModal ? /*#__PURE__*/_react.default.createElement(_Modal.default, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Would you like to adopt ", name), /*#__PURE__*/_react.default.createElement("div", {
+      className: "buttons"
+    }, /*#__PURE__*/_react.default.createElement("button", {
+      onClick: this.adopt
+    }, "Yes"), /*#__PURE__*/_react.default.createElement("button", {
+      onClick: this.toggleModal
+    }, "No, I am a monster")))) : null));
   }
 
 }
@@ -33021,20 +33122,7 @@ class Details extends _react.default.Component {
 function DetailsWithErrorBoundries(props) {
   return /*#__PURE__*/_react.default.createElement(_ErrorBoundry.default, null, /*#__PURE__*/_react.default.createElement(Details, props));
 }
-},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundry":"ErrorBoundry.js"}],"ThemeContext.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = require("react");
-
-const ThemeContext = (0, _react.createContext)(['green', () => {}]);
-var _default = ThemeContext;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"App.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@frontendmasters/pet":"../node_modules/@frontendmasters/pet/index.js","./Carousel":"Carousel.js","./ErrorBoundry":"ErrorBoundry.js","./ThemeContext":"ThemeContext.js","@reach/router":"../node_modules/@reach/router/es/index.js","./Modal":"Modal.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireWildcard(require("react"));
@@ -33056,7 +33144,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const App = () => {
-  const themeHooks = (0, _react.useState)("darkblue");
+  const themeHooks = (0, _react.useState)("peru");
   return /*#__PURE__*/_react.default.createElement(_ThemeContext.default.Provider, {
     value: themeHooks
   }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement(_router.Link, {
@@ -33097,7 +33185,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54704" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57947" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
